@@ -12,6 +12,7 @@ export default function List({ list, isOver, createCard, updateCard, deleteCard,
         attributes,
         listeners,
         setNodeRef,
+        setActivatorNodeRef,
         transform,
         transition,
         isDragging,
@@ -25,7 +26,10 @@ export default function List({ list, isOver, createCard, updateCard, deleteCard,
 
     const RenderCards = () => (
         <div className="flex gap-1 flex-col">
-            <p>{list.title}</p>
+            <div className="flex gap-2">
+                <div ref={setActivatorNodeRef} {...listeners} className="w-4 hover:bg-slate-700">0</div>
+                <p>{list.title}</p>
+            </div>
             <SortableContext items={cardIDs}>
                 {cards.map((card: CardType) => (
                     <Card key={card.id} card={card} isOver={false} />
@@ -41,7 +45,7 @@ export default function List({ list, isOver, createCard, updateCard, deleteCard,
     };
 
     return (
-        <section ref={setNodeRef} style={style} {...attributes} {...listeners} className='border w-24 p-2'>
+        <section ref={setNodeRef} style={style} {...attributes}  className='border w-24 p-2'>
             {/** If the list is being hovered, use the card's position on the board 
          * to indicate it's original position, otherwise render it as normal */}
             {isDragging ? <></> : RenderCards()}
