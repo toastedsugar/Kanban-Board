@@ -15,9 +15,9 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 
 import { createPortal } from "react-dom";
 import { ListType, CardType } from "../types";
-import List, { Card } from "./List";
+import List from "./List";
+import Card from "./Card";
 import { nanoid } from "nanoid";
-
 
 export default function Board() {
   /*
@@ -33,13 +33,13 @@ export default function Board() {
       { id: "7", parentListID: "3", title: "card" }, { id: "8", parentListID: "3", title: "card" }, { id: "9", parentListID: "3", title: "card" }
     ])
     */
-  const [data, setData] = useState<ListType[]>([])
+  const [lists, setLists] = useState<ListType[]>([])
   const [cards, setCards] = useState<CardType[]>([])
 
   // IDs for all the lists on the board
   const ListIDs: string[] = useMemo(() => (
-    data?.map((list) => list.id)
-  ), [data])
+    lists?.map((list) => list.id)
+  ), [lists])
 
   // The item that is being dragged
   const [activeList, setActiveList] = useState<ListType | null>(null)
@@ -49,10 +49,10 @@ export default function Board() {
   /** List Methods */
   const CreateList = () => {
     const newList: ListType = {
-      id: String(data.length + 1),
-      title: `List ${data.length + 1}`
+      id: String(lists.length + 1),
+      title: `List ${lists.length + 1}`
     }
-    setData([...data, newList])
+    setLists([...lists, newList])
   }
 
   /** Card Methods */
@@ -178,20 +178,19 @@ export default function Board() {
     if (activeListID === overListID) return     // We hovering over the list that it's already in so no need to swap
 
     // Update state to reflect the items being moved
-    setData(data => arrayMove(
-      data,
-      data.findIndex((list: ListType) => list.id === activeListID),     // Index of the original position
-      data.findIndex((list: ListType) => list.id === overListID)        // Index of the destination position
+    setLists(lists => arrayMove(
+      lists,
+      lists.findIndex((list: ListType) => list.id === activeListID),     // Index of the original position
+      lists.findIndex((list: ListType) => list.id === overListID)        // Index of the destination position
     ))
 
   }
 
   const RenderLists = () => {
-    return data.map((list: ListType, index: number) => (
+    return lists.map((list: ListType) => (
       <List
         key={list.id}
         list={list}
-        isOver={false}
         createCard={createCard}
         updateCard={updateCard}
         deleteCard={deleteCard}
@@ -223,7 +222,6 @@ export default function Board() {
             {activeList && (
               <List
                 list={activeList}
-                isOver={false}
                 createCard={createCard}
                 updateCard={updateCard}
                 deleteCard={deleteCard}
@@ -233,7 +231,6 @@ export default function Board() {
             {activeCard && (
               <Card
                 card={activeCard}
-                isOver={false}
               />
             )}
           </DragOverlay>,

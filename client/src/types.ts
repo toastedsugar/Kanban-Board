@@ -20,7 +20,6 @@ export type CardDetailsType = {
 
 export type ListProps = {
     list: ListType,
-    isOver: boolean,
     createCard: (listID: string) => void,
     updateCard: (listID: string) => void,
     deleteCard: (listID: string) => void
@@ -29,5 +28,4 @@ export type ListProps = {
 
 export type CardProps = {
     card: CardType,
-    isOver: boolean
 }

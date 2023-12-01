@@ -1,9 +1,11 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from '@dnd-kit/utilities';
-import { ListProps, CardProps, ListType, CardType } from "../types";
+import { ListProps, CardProps, CardType, ListType } from "../types";
 import { useMemo } from "react";
 
-export default function List({ list, isOver, createCard, updateCard, deleteCard, cards }: ListProps) {
+import Card from "./Card";
+
+export default function List({ list, createCard, updateCard, deleteCard, cards }: ListProps) {
     const cardIDs = useMemo(() => {
         return cards.map((card: CardType) => card.id)
     }, [cards])
@@ -32,7 +34,7 @@ export default function List({ list, isOver, createCard, updateCard, deleteCard,
             </div>
             <SortableContext items={cardIDs}>
                 {cards.map((card: CardType) => (
-                    <Card key={card.id} card={card} isOver={false} />
+                    <Card key={card.id} card={card} />
                 ))}
             </SortableContext>
             <button className="hover:bg-slate-700" onClick={() => { createCard(list.id) }}>+ New</button>
@@ -50,41 +52,5 @@ export default function List({ list, isOver, createCard, updateCard, deleteCard,
          * to indicate it's original position, otherwise render it as normal */}
             {isDragging ? <></> : RenderCards()}
         </section>
-    )
-}
-
-export function Card({ card, isOver }: CardProps) {
-
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({
-        id: card.id,
-        data: {
-            type: "card",
-            card
-        }
-    });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
-
-
-    const RenderCard = () => (
-        <div>
-            {card.title}
-        </div>
-    )
-    return (
-        <section ref={setNodeRef} style={style} {...attributes} {...listeners} className='border p-1 w-full h-full z-10'>
-            {isDragging ? <>_</> : RenderCard()}
-        </section>
-
     )
 }
