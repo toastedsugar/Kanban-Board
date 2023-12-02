@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo } from "react"
+import { useState, useMemo, useReducer } from "react"
 import {
   DndContext,
   DragEndEvent,
@@ -18,6 +18,7 @@ import { ListType, CardType } from "../types";
 import List from "./List";
 import Card from "./Card";
 import { nanoid } from "nanoid";
+import { ACTION_TYPES, CardsReducer } from "../reducers/CardsReducer";
 
 export default function Board() {
   /*
@@ -34,7 +35,7 @@ export default function Board() {
     ])
     */
   const [lists, setLists] = useState<ListType[]>([])
-  const [cards, setCards] = useState<CardType[]>([])
+  const [cards, dispatch] = useReducer(CardsReducer, [])
 
   // IDs for all the lists on the board
   const ListIDs: string[] = useMemo(() => (
@@ -57,6 +58,7 @@ export default function Board() {
 
   /** Card Methods */
   const createCard = (listID: string) => {
+    /*
     console.log("Creating card")
     const newCard: CardType = {
       id: nanoid(),
@@ -64,6 +66,11 @@ export default function Board() {
       title: `Card ${cards.length + 1}`
     }
     setCards([...cards, newCard])
+    */
+    dispatch({
+      type: ACTION_TYPES.ADD_CARD,
+      payload: { parentListID: String(listID) }
+    })
   }
   const updateCard = (listID: string) => {
     console.log("Updating card")
@@ -124,26 +131,35 @@ export default function Board() {
     const isActiveCard = active.data.current?.type === 'card'
     const isOverCard = over.data.current?.type === 'card'
 
-    if( !activeCard) return     // Do nothing if a card isnt being dragged over anything
+    if (!activeCard) return     // Do nothing if a card isnt being dragged over anything
 
     // Handle dropping card over another card
     if (isActiveCard && isOverCard) {
       console.log("hovering over a card in current list")
 
       // Get the index in the cards array for the active and target cards
-      const activeIndex = cards.findIndex((card: CardType) => card.id === activeID)     // Index of the original position
-      const overIndex = cards.findIndex((card: CardType) => card.id === overID)         // Index of the destination position  
+      const activeIndex:number = cards.findIndex((card: CardType) => card.id === activeID)     // Index of the original position
+      const overIndex:number = cards.findIndex((card: CardType) => card.id === overID)         // Index of the destination position  
 
       // If the card is hovering over a card in another list, update the card's 
       // parent ID to reflect it's new parent list
       cards[activeIndex].parentListID = cards[overIndex].parentListID
 
       /** We are modifying state directly, this should be fixed later */
+      /*
       setCards(cards => arrayMove(
         cards,
         activeIndex,
         overIndex
       ))
+      */
+      dispatch({
+        type: ACTION_TYPES.SWAP_CARD,
+        payload: {
+          activeIndex: activeIndex,
+          overIndex: overIndex
+        }
+      })
     }
 
     // Handle dropping a card into a different list
@@ -151,15 +167,25 @@ export default function Board() {
 
     if (isOverList && isActiveCard) {
       // Get the index in the cards array for the active and target cards
-      const activeIndex = cards.findIndex((card: CardType) => card.id === activeID)     // Index of the original position
-    
+      const activeIndex:number = cards.findIndex((card: CardType) => card.id === activeID)     // Index of the original position
+
       cards[activeIndex].parentListID = String(overID)
 
+      /**
+       * 
       setCards(cards => arrayMove(
         cards,
         activeIndex,
         activeIndex
-      ))
+        ))
+        */
+      dispatch({
+        type: ACTION_TYPES.SWAP_CARD,
+        payload: {
+          activeIndex: activeIndex,
+          overIndex: activeIndex
+        }
+      })
     }
 
   }

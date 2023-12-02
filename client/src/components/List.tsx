@@ -47,7 +47,7 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
     };
 
     return (
-        <section ref={setNodeRef} style={style} {...attributes}  className='border w-24 p-2'>
+        <section ref={setNodeRef} style={style} {...attributes}  className='border w-48 p-2'>
             {/** If the list is being hovered, use the card's position on the board 
          * to indicate it's original position, otherwise render it as normal */}
             {isDragging ? <></> : RenderCards()}
