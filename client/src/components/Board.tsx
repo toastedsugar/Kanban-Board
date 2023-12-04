@@ -55,8 +55,8 @@ export default function Board() {
     }
     cardDispatch(action)
   }
-  const updateCard = (listID: string) => { console.log("Updating card") }
-  const deleteCard = (listID: string) => { console.log("deleting card") }
+  const updateCard = () => { console.log("Updating card") }
+  const deleteCard = () => { console.log("deleting card") }
 
   /**************************************************** */
   // Configuring sensors 

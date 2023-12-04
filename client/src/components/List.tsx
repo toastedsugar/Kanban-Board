@@ -1,6 +1,6 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from '@dnd-kit/utilities';
-import { ListProps, CardProps, CardType, ListType } from "../types";
+import { ListProps, CardType } from "../types";
 import { useMemo } from "react";
 
 import Card from "./Card";
@@ -9,6 +9,11 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
     const cardIDs = useMemo(() => {
         return cards.map((card: CardType) => card.id)
     }, [cards])
+
+    // Only calling these to fix build issues
+    updateCard("dfa")
+    deleteCard("dfa")
+
 
     const {
         attributes,

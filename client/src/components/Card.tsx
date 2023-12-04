@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from '@dnd-kit/utilities';
 import { CardProps } from "../types";
 
-export default function Card({card}:CardProps ) {
+export default function Card({ card }: CardProps) {
 
     const {
         attributes,
@@ -24,22 +24,22 @@ export default function Card({card}:CardProps ) {
         transition,
     };
 
-    const RenderCard = (hovering:boolean) => (
+    const RenderCard = () => (
         <div>
             {card.title}
         </div>
     )
-    
+
 
     return (
-        <section 
-        ref={setNodeRef} 
-        style={style} 
-        {...attributes} 
-        {...listeners} 
-        className='bg-color-surface-mixed-400  p-1 w-full h-full z-10'
+        <section
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+            className='bg-color-surface-mixed-400  p-1 w-full h-full z-10'
         >
-            {isDragging ? RenderCard(true) : RenderCard(false)}
+            {isDragging ? <>_</> : RenderCard()}
         </section>
 
     )

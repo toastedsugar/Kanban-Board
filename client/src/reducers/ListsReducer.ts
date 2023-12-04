@@ -1,7 +1,6 @@
 import { Reducer } from "react";
 
-import { CardType, ListType } from "../types";
-import { nanoid } from "nanoid";
+import { ListType } from "../types";
 import { arrayMove } from "@dnd-kit/sortable";
 
 
