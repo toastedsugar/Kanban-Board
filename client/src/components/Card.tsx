@@ -24,14 +24,22 @@ export default function Card({card}:CardProps ) {
         transition,
     };
 
-    const RenderCard = () => (
+    const RenderCard = (hovering:boolean) => (
         <div>
             {card.title}
         </div>
     )
+    
+
     return (
-        <section ref={setNodeRef} style={style} {...attributes} {...listeners} className='border p-1 w-full h-full z-10'>
-            {isDragging ? <>_</> : RenderCard()}
+        <section 
+        ref={setNodeRef} 
+        style={style} 
+        {...attributes} 
+        {...listeners} 
+        className='bg-color-surface-mixed-400  p-1 w-full h-full z-10'
+        >
+            {isDragging ? RenderCard(true) : RenderCard(false)}
         </section>
 
     )

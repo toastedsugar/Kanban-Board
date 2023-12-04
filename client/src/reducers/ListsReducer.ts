@@ -5,19 +5,18 @@ import { nanoid } from "nanoid";
 import { arrayMove } from "@dnd-kit/sortable";
 
 
-export const ACTION_TYPES = {
+export const LIST_ACTION_TYPES = {
     ADD_LIST: "ADD_LIST",
     UPDATE_LIST: "UPDATE_LIST",
     SWAP_LIST: "SWAP_LIST",
     DELETE_LIST: "DELETE_LIST",
 }
 
+/*
 // Create a card
-type CreateListActionType = {
+export type CreateListActionType = {
     type: string,
-    payload: {
-        parentListID: string
-    }
+    payload:any
 }
 
 // Update a list's title . It should get a card as input
@@ -29,7 +28,7 @@ type UpdateListActionType = {
     }
 }
 
-type SwapListActionType = {
+export type SwapListActionType = {
     type: string,
     payload: {
         activeIndex: number,
@@ -46,22 +45,36 @@ type ListActionType = CreateListActionType
     | UpdateListActionType
     | SwapListActionType
     | DeleteListActionType
+*/
 
-export const CardsReducer: Reducer<CardType[], any> = (state, action) => {
+export type ListActionType = {
+    type: string,
+    payload: any
+}
+
+export const ListsReducer: Reducer<ListType[], ListActionType> = (state, action) => {
     switch (action.type) {
-        case ACTION_TYPES.ADD_LIST:
+        case LIST_ACTION_TYPES.ADD_LIST:
             console.log("Creating List")
-            return state
+            const newList: ListType = {
+                id: String(state.length + 1),
+                title: `List ${state.length + 1}`
+            }
+            return [...state, newList]
 
-        case ACTION_TYPES.UPDATE_LIST:
+        case LIST_ACTION_TYPES.UPDATE_LIST:
             console.log("Updating List")
             return state
 
-        case ACTION_TYPES.SWAP_LIST:
+        case LIST_ACTION_TYPES.SWAP_LIST:
             console.log("Swapping List")
-            return state
+            return (arrayMove(
+                state,
+                action.payload.activeIndex,
+                action.payload.overIndex
+            ))
 
-        case ACTION_TYPES.DELETE_LIST:
+        case LIST_ACTION_TYPES.DELETE_LIST:
             console.log("Deleting List")
             return state
 

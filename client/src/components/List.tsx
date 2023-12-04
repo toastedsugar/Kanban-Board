@@ -27,17 +27,22 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
     });
 
     const RenderCards = () => (
-        <div className="flex gap-1 flex-col">
-            <div className="flex gap-2">
+        <div className="flex gap-1.5 flex-col">
+            <div className="flex gap-2 bg-color-surface-100 p-2">
                 <div ref={setActivatorNodeRef} {...listeners} className="w-4 hover:bg-slate-700">0</div>
-                <p>{list.title}</p>
+                <p className="">{list.title}</p>
             </div>
             <SortableContext items={cardIDs}>
                 {cards.map((card: CardType) => (
                     <Card key={card.id} card={card} />
                 ))}
             </SortableContext>
-            <button className="hover:bg-slate-700" onClick={() => { createCard(list.id) }}>+ New</button>
+            <button
+                className="hover:bg-slate-700"
+                onClick={() => { createCard(list.id) }}
+            >
+                + New
+            </button>
         </div>
     )
 
@@ -47,7 +52,7 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
     };
 
     return (
-        <section ref={setNodeRef} style={style} {...attributes}  className='border w-48 p-2'>
+        <section ref={setNodeRef} style={style} {...attributes} className='bg-color-surface-mixed-200 w-56 p-3'>
             {/** If the list is being hovered, use the card's position on the board 
          * to indicate it's original position, otherwise render it as normal */}
             {isDragging ? <></> : RenderCards()}

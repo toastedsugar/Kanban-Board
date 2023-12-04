@@ -5,15 +5,16 @@ import { nanoid } from "nanoid";
 import { arrayMove } from "@dnd-kit/sortable";
 
 
-export const ACTION_TYPES = {
+export const CARD_ACTION_TYPES = {
     ADD_CARD: "ADD_CARD",
     UPDATE_CARD: "UPDATE_CARD",
     SWAP_CARD: "SWAP_CARD",
     DELETE_CARD: "DELETE_CARD",
 }
 
+/*
 // Create a card
-type CreateCardActionType = {
+export type CreateCardActionType = {
     type: string,
     payload: {
         parentListID: string
@@ -43,10 +44,15 @@ type CardActionType = CreateCardActionType
     | UpdateCardActionType
     | SwapCardsActionType
     | DeleteCardActionType
+*/
+export type CardActionType = {
+    type: string,
+    payload: any
+}
 
-export const CardsReducer: Reducer<CardType[], any > = (state, action) => {
+export const CardsReducer: Reducer<CardType[], CardActionType> = (state, action) => {
     switch (action.type) {
-        case ACTION_TYPES.ADD_CARD:
+        case CARD_ACTION_TYPES.ADD_CARD:
             console.log("Creating Card")
             const newCard: CardType = {
                 id: nanoid(),
@@ -55,7 +61,7 @@ export const CardsReducer: Reducer<CardType[], any > = (state, action) => {
             }
             return [...state, newCard]
 
-        case ACTION_TYPES.SWAP_CARD:
+        case CARD_ACTION_TYPES.SWAP_CARD:
             console.log("Swapping Card")
 
             return (arrayMove(
@@ -65,11 +71,11 @@ export const CardsReducer: Reducer<CardType[], any > = (state, action) => {
             ))
             return state;
 
-        case ACTION_TYPES.UPDATE_CARD:
+        case CARD_ACTION_TYPES.UPDATE_CARD:
             console.log("Updating Card")
             return state;
 
-        case ACTION_TYPES.DELETE_CARD:
+        case CARD_ACTION_TYPES.DELETE_CARD:
             console.log("Deleting Card")
             return state;
 

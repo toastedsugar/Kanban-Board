@@ -11,31 +11,18 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import { SortableContext } from "@dnd-kit/sortable";
 
 import { createPortal } from "react-dom";
 import { ListType, CardType } from "../types";
 import List from "./List";
 import Card from "./Card";
-import { nanoid } from "nanoid";
-import { ACTION_TYPES, CardsReducer } from "../reducers/CardsReducer";
+import { CARD_ACTION_TYPES, CardActionType, CardsReducer } from "../reducers/CardsReducer";
+import { LIST_ACTION_TYPES, ListActionType, ListsReducer } from "../reducers/ListsReducer";
 
 export default function Board() {
-  /*
-    const [data, setData] = useState<ListType[]>([
-      { id: "1", title: "Group 1" },
-      { id: "2", title: "Group 2" },
-      { id: "3", title: "Group 3" }
-    ])
-  
-    const [cards, setCards] = useState<CardType[]>([
-      { id: "1", parentListID: "1", title: "card" }, { id: "2", parentListID: "1", title: "card" }, { id: "3", parentListID: "1", title: "card" },
-      { id: "4", parentListID: "2", title: "card" }, { id: "5", parentListID: "2", title: "card" }, { id: "6", parentListID: "2", title: "card" },
-      { id: "7", parentListID: "3", title: "card" }, { id: "8", parentListID: "3", title: "card" }, { id: "9", parentListID: "3", title: "card" }
-    ])
-    */
-  const [lists, setLists] = useState<ListType[]>([])
-  const [cards, dispatch] = useReducer(CardsReducer, [])
+  const [lists, listDispatch] = useReducer(ListsReducer, [])
+  const [cards, cardDispatch] = useReducer(CardsReducer, [])
 
   // IDs for all the lists on the board
   const ListIDs: string[] = useMemo(() => (
@@ -47,38 +34,31 @@ export default function Board() {
   const [activeCard, setActiveCard] = useState<CardType | null>(null)
 
 
-  /** List Methods */
+  /***************************************************
+   * List Methods */
   const CreateList = () => {
-    const newList: ListType = {
-      id: String(lists.length + 1),
-      title: `List ${lists.length + 1}`
+    const action: ListActionType = {
+      type: LIST_ACTION_TYPES.ADD_LIST,
+      payload: {}
     }
-    setLists([...lists, newList])
+    listDispatch(action)
   }
 
-  /** Card Methods */
+  /***************************************************
+   * Card Methods */
   const createCard = (listID: string) => {
-    /*
-    console.log("Creating card")
-    const newCard: CardType = {
-      id: nanoid(),
-      parentListID: listID,
-      title: `Card ${cards.length + 1}`
+    const action: CardActionType = {
+      type: CARD_ACTION_TYPES.ADD_CARD,
+      payload: {
+        parentListID: listID
+      }
     }
-    setCards([...cards, newCard])
-    */
-    dispatch({
-      type: ACTION_TYPES.ADD_CARD,
-      payload: { parentListID: String(listID) }
-    })
+    cardDispatch(action)
   }
-  const updateCard = (listID: string) => {
-    console.log("Updating card")
-  }
-  const deleteCard = (listID: string) => {
-    console.log("Deleting card")
-  }
+  const updateCard = (listID: string) => { console.log("Updating card") }
+  const deleteCard = (listID: string) => { console.log("deleting card") }
 
+  /**************************************************** */
   // Configuring sensors 
   const mouseSensor = useSensor(MouseSensor, {
     // Require the mouse to move by 10 pixels before activating
@@ -138,8 +118,8 @@ export default function Board() {
       console.log("hovering over a card in current list")
 
       // Get the index in the cards array for the active and target cards
-      const activeIndex:number = cards.findIndex((card: CardType) => card.id === activeID)     // Index of the original position
-      const overIndex:number = cards.findIndex((card: CardType) => card.id === overID)         // Index of the destination position  
+      const activeIndex: number = cards.findIndex((card: CardType) => card.id === activeID)     // Index of the original position
+      const overIndex: number = cards.findIndex((card: CardType) => card.id === overID)         // Index of the destination position  
 
       // If the card is hovering over a card in another list, update the card's 
       // parent ID to reflect it's new parent list
@@ -153,8 +133,8 @@ export default function Board() {
         overIndex
       ))
       */
-      dispatch({
-        type: ACTION_TYPES.SWAP_CARD,
+      cardDispatch({
+        type: CARD_ACTION_TYPES.SWAP_CARD,
         payload: {
           activeIndex: activeIndex,
           overIndex: overIndex
@@ -167,7 +147,7 @@ export default function Board() {
 
     if (isOverList && isActiveCard) {
       // Get the index in the cards array for the active and target cards
-      const activeIndex:number = cards.findIndex((card: CardType) => card.id === activeID)     // Index of the original position
+      const activeIndex: number = cards.findIndex((card: CardType) => card.id === activeID)     // Index of the original position
 
       cards[activeIndex].parentListID = String(overID)
 
@@ -179,8 +159,8 @@ export default function Board() {
         activeIndex
         ))
         */
-      dispatch({
-        type: ACTION_TYPES.SWAP_CARD,
+      cardDispatch({
+        type: CARD_ACTION_TYPES.SWAP_CARD,
         payload: {
           activeIndex: activeIndex,
           overIndex: activeIndex
@@ -204,11 +184,21 @@ export default function Board() {
     if (activeListID === overListID) return     // We hovering over the list that it's already in so no need to swap
 
     // Update state to reflect the items being moved
+    /*
     setLists(lists => arrayMove(
       lists,
       lists.findIndex((list: ListType) => list.id === activeListID),     // Index of the original position
       lists.findIndex((list: ListType) => list.id === overListID)        // Index of the destination position
     ))
+    */
+    const action: ListActionType = {
+      type: LIST_ACTION_TYPES.SWAP_LIST,
+      payload: {
+        activeIndex: lists.findIndex((list: ListType) => list.id === activeListID),     // Index of the original position
+        overIndex: lists.findIndex((list: ListType) => list.id === overListID)        // Index of the destination position
+      }
+    }
+    listDispatch(action)
 
   }
 
@@ -227,42 +217,51 @@ export default function Board() {
   return (
     <div>
       Title
-      <DndContext
-        sensors={sensors}
-        onDragStart={onDragStart}
-        onDragOver={onDragOver}
-        onDragEnd={onDragEnd}
-      >
-        <div className='flex flex-row gap-2'>
-          <SortableContext items={ListIDs}>
-            {RenderLists()}
-          </SortableContext>
-          <button onClick={CreateList} className="self-start border p-2 hover:bg-slate-700">New List</button>
-        </div>
+      <div className="flex flex-cols overflow-y-auto">
+        <DndContext
+          sensors={sensors}
+          onDragStart={onDragStart}
+          onDragOver={onDragOver}
+          onDragEnd={onDragEnd}
+        >
+          <div className='flex flex-row gap-4 flex-none items-start'>
+            {/** ALL the lists are rendered here */}
+            <SortableContext items={ListIDs}>
+              {RenderLists()}
+            </SortableContext>
+            {/** The button to create a new list is after all the lists are rendered */}
+            <button 
+            onClick={CreateList} 
+            className="grow-0 bg-color-surface-mixed-200 w-36 py-4"
+            >
+              New List
+              </button>
+          </div>
 
-        {/** The Drag overlay is the item that is being dragged. 
+          {/** The Drag overlay is the item that is being dragged. 
          * It is the one that is attached to the mouse and is hovering 
          * over the other lists, unlike the one that is on the board */}
-        {createPortal(
-          <DragOverlay>
-            {activeList && (
-              <List
-                list={activeList}
-                createCard={createCard}
-                updateCard={updateCard}
-                deleteCard={deleteCard}
-                cards={cards.filter((card: CardType) => card.parentListID === activeList.id)}
-              />
-            )}
-            {activeCard && (
-              <Card
-                card={activeCard}
-              />
-            )}
-          </DragOverlay>,
-          document.body
-        )}
-      </DndContext>
+          {createPortal(
+            <DragOverlay>
+              {activeList && (
+                <List
+                  list={activeList}
+                  createCard={createCard}
+                  updateCard={updateCard}
+                  deleteCard={deleteCard}
+                  cards={cards.filter((card: CardType) => card.parentListID === activeList.id)}
+                />
+              )}
+              {activeCard && (
+                <Card
+                  card={activeCard}
+                />
+              )}
+            </DragOverlay>,
+            document.body
+          )}
+        </DndContext>
+      </div>
     </div>
   )
 }
