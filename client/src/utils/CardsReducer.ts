@@ -6,45 +6,13 @@ import { arrayMove } from "@dnd-kit/sortable";
 
 
 export const CARD_ACTION_TYPES = {
+    INIT_CARD: "INIT_CARD",
     ADD_CARD: "ADD_CARD",
     UPDATE_CARD: "UPDATE_CARD",
     SWAP_CARD: "SWAP_CARD",
     DELETE_CARD: "DELETE_CARD",
 }
 
-/*
-// Create a card
-export type CreateCardActionType = {
-    type: string,
-    payload: {
-        parentListID: string
-    }
-}
-
-// Update card. It should get a card as input
-type UpdateCardActionType = {
-    type: string,
-    payload: CardType
-}
-
-type SwapCardsActionType = {
-    type: string,
-    payload: {
-        activeIndex: number,
-        overIndex: number
-    }
-}
-
-type DeleteCardActionType = {
-    type: string,
-    payload: string
-}
-
-type CardActionType = CreateCardActionType
-    | UpdateCardActionType
-    | SwapCardsActionType
-    | DeleteCardActionType
-*/
 export type CardActionType = {
     type: string,
     payload: any
@@ -52,6 +20,9 @@ export type CardActionType = {
 
 export const CardsReducer: Reducer<CardType[], CardActionType> = (state, action) => {
     switch (action.type) {
+        case CARD_ACTION_TYPES.INIT_CARD:
+            return action.payload
+
         case CARD_ACTION_TYPES.ADD_CARD:
             console.log("Creating Card")
             const newCard: CardType = {

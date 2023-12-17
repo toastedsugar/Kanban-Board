@@ -1,6 +1,6 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from '@dnd-kit/utilities';
-import { ListProps, CardType } from "../types";
+import { ListProps, CardType } from "../../types";
 import { useMemo } from "react";
 
 import Card from "./Card";
@@ -33,8 +33,10 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
 
     const RenderCards = () => (
         <div className="flex gap-1.5 flex-col">
-            <div className="flex gap-2 bg-color-surface-100 p-2">
-                <div ref={setActivatorNodeRef} {...listeners} className="w-4 hover:bg-slate-700">0</div>
+            <div ref={setActivatorNodeRef} {...listeners} className="flex gap-2 bg-color-surface-100 p-2 select-none cursor-grab">
+                <span className="material-symbols-outlined">
+                    drag_indicator
+                </span>
                 <p className="">{list.title}</p>
             </div>
             <SortableContext items={cardIDs}>
@@ -43,10 +45,10 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
                 ))}
             </SortableContext>
             <button
-                className="hover:bg-slate-700"
+                className="flex gap-2 justify-center hover:bg-color-surface-mixed-300"
                 onClick={() => { createCard(list.id) }}
             >
-                + New
+                <span className="material-symbols-outlined">add_circle</span> Card
             </button>
         </div>
     )
@@ -57,10 +59,10 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
     };
 
     return (
-        <section ref={setNodeRef} style={style} {...attributes} className='bg-color-surface-mixed-200 w-56 p-3'>
+        <section ref={setNodeRef} style={style} {...attributes} className={`bg-color-surface-mixed-200 w-56 p-3 ${isDragging ? "brightness-200" : ""}`}>
             {/** If the list is being hovered, use the card's position on the board 
          * to indicate it's original position, otherwise render it as normal */}
-            {isDragging ? <></> : RenderCards()}
+            {RenderCards()}
         </section>
     )
 }

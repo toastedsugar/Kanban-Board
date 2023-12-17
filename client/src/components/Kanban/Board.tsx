@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo, useReducer } from "react"
+import { useState, useMemo, useReducer, useEffect } from "react"
 import {
   DndContext,
   DragEndEvent,
@@ -14,15 +14,32 @@ import {
 import { SortableContext } from "@dnd-kit/sortable";
 
 import { createPortal } from "react-dom";
-import { ListType, CardType } from "../types";
+import { ListType, CardType } from "../../types";
 import List from "./List";
 import Card from "./Card";
-import { CARD_ACTION_TYPES, CardActionType, CardsReducer } from "../reducers/CardsReducer";
-import { LIST_ACTION_TYPES, ListActionType, ListsReducer } from "../reducers/ListsReducer";
+import { CARD_ACTION_TYPES, CardActionType, CardsReducer } from "../../utils/CardsReducer";
+import { LIST_ACTION_TYPES, ListActionType, ListsReducer } from "../../utils/ListsReducer";
+import { ListData, CardData } from "../../utils/data";
 
 export default function Board() {
   const [lists, listDispatch] = useReducer(ListsReducer, [])
   const [cards, cardDispatch] = useReducer(CardsReducer, [])
+
+
+  // Initialize Board with premade/saved data
+  useEffect(() => {
+    // Initiailize Lists
+    listDispatch({
+      type: LIST_ACTION_TYPES.INIT_LIST,
+      payload: ListData
+    })
+    // Inititialize Cards
+    cardDispatch({
+      type: CARD_ACTION_TYPES.INIT_CARD,
+      payload: CardData
+    })
+
+  }, [])
 
   // IDs for all the lists on the board
   const ListIDs: string[] = useMemo(() => (
@@ -125,14 +142,6 @@ export default function Board() {
       // parent ID to reflect it's new parent list
       cards[activeIndex].parentListID = cards[overIndex].parentListID
 
-      /** We are modifying state directly, this should be fixed later */
-      /*
-      setCards(cards => arrayMove(
-        cards,
-        activeIndex,
-        overIndex
-      ))
-      */
       cardDispatch({
         type: CARD_ACTION_TYPES.SWAP_CARD,
         payload: {
@@ -151,14 +160,6 @@ export default function Board() {
 
       cards[activeIndex].parentListID = String(overID)
 
-      /**
-       * 
-      setCards(cards => arrayMove(
-        cards,
-        activeIndex,
-        activeIndex
-        ))
-        */
       cardDispatch({
         type: CARD_ACTION_TYPES.SWAP_CARD,
         payload: {
@@ -167,7 +168,6 @@ export default function Board() {
         }
       })
     }
-
   }
 
   const onDragEnd = (event: DragEndEvent) => {
@@ -183,14 +183,6 @@ export default function Board() {
 
     if (activeListID === overListID) return     // We hovering over the list that it's already in so no need to swap
 
-    // Update state to reflect the items being moved
-    /*
-    setLists(lists => arrayMove(
-      lists,
-      lists.findIndex((list: ListType) => list.id === activeListID),     // Index of the original position
-      lists.findIndex((list: ListType) => list.id === overListID)        // Index of the destination position
-    ))
-    */
     const action: ListActionType = {
       type: LIST_ACTION_TYPES.SWAP_LIST,
       payload: {
@@ -216,8 +208,11 @@ export default function Board() {
   }
   return (
     <div>
-      Title
-      <div className="flex flex-cols overflow-y-auto">
+      <h2 className="text-2xl font-semibold py-2">
+
+      Kanban Board Demo
+      </h2>
+      <div className="flex flex-cols ">
         <DndContext
           sensors={sensors}
           onDragStart={onDragStart}
@@ -230,12 +225,14 @@ export default function Board() {
               {RenderLists()}
             </SortableContext>
             {/** The button to create a new list is after all the lists are rendered */}
-            <button 
-            onClick={CreateList} 
-            className="grow-0 bg-color-surface-mixed-200 w-36 py-4"
+            <button
+              onClick={CreateList}
+              className="grow-0 bg-color-surface-mixed-200 hover:hover:bg-color-surface-mixed-300 w-36 py-4"
             >
-              New List
-              </button>
+              <div className="flex gap-2 justify-center">
+                <span className="material-symbols-outlined">add_circle</span> List
+              </div>
+            </button>
           </div>
 
           {/** The Drag overlay is the item that is being dragged. 

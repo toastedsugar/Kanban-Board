@@ -5,46 +5,12 @@ import { arrayMove } from "@dnd-kit/sortable";
 
 
 export const LIST_ACTION_TYPES = {
+    INIT_LIST: "INIT_LIST",
     ADD_LIST: "ADD_LIST",
     UPDATE_LIST: "UPDATE_LIST",
     SWAP_LIST: "SWAP_LIST",
     DELETE_LIST: "DELETE_LIST",
 }
-
-/*
-// Create a card
-export type CreateListActionType = {
-    type: string,
-    payload:any
-}
-
-// Update a list's title . It should get a card as input
-type UpdateListActionType = {
-    type: string,
-    payload: {
-        id: string,
-        newTitle: string
-    }
-}
-
-export type SwapListActionType = {
-    type: string,
-    payload: {
-        activeIndex: number,
-        overIndex: number
-    }
-}
-
-type DeleteListActionType = {
-    type: string,
-    payload: string
-}
-
-type ListActionType = CreateListActionType
-    | UpdateListActionType
-    | SwapListActionType
-    | DeleteListActionType
-*/
 
 export type ListActionType = {
     type: string,
@@ -53,6 +19,8 @@ export type ListActionType = {
 
 export const ListsReducer: Reducer<ListType[], ListActionType> = (state, action) => {
     switch (action.type) {
+        case LIST_ACTION_TYPES.INIT_LIST:
+            return action.payload
         case LIST_ACTION_TYPES.ADD_LIST:
             console.log("Creating List")
             const newList: ListType = {
