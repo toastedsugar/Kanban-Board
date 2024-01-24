@@ -24,7 +24,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
 export default function App() {
   return (
-    <div className="h-screen">
+    <div>
       <div className="flex flex-col bg-color-surface-mixed-100 text-color-text-primary w-screen h-screen">
         <Navbar />
         <Kanban />

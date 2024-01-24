@@ -8,6 +8,7 @@ import {
   DragStartEvent,
   MouseSensor,
   TouchSensor,
+  closestCorners,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -208,18 +209,19 @@ export default function Board() {
   }
   return (
     <div>
-      <h2 className="text-2xl font-semibold py-2">
+      <h2 className="text-2xl font-semibold py-2 ">
 
-      Kanban Board Demo
+        Kanban Board Demo
       </h2>
-      <div className="flex flex-cols ">
+      <div className="flex flex-cols">
         <DndContext
+          collisionDetection={closestCorners}
           sensors={sensors}
           onDragStart={onDragStart}
           onDragOver={onDragOver}
           onDragEnd={onDragEnd}
         >
-          <div className='flex flex-row gap-4 flex-none items-start'>
+          <div className='flex flex-row items-stretch gap-4'>
             {/** ALL the lists are rendered here */}
             <SortableContext items={ListIDs}>
               {RenderLists()}
@@ -227,7 +229,7 @@ export default function Board() {
             {/** The button to create a new list is after all the lists are rendered */}
             <button
               onClick={CreateList}
-              className="grow-0 bg-color-surface-mixed-200 hover:hover:bg-color-surface-mixed-300 w-36 py-4"
+              className="self-start bg-color-surface-mixed-200 hover:hover:bg-color-surface-mixed-300 w-36 py-4"
             >
               <div className="flex gap-2 justify-center">
                 <span className="material-symbols-outlined">add_circle</span> List

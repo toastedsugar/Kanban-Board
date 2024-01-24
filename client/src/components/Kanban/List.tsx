@@ -45,7 +45,7 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
                 ))}
             </SortableContext>
             <button
-                className="flex gap-2 justify-center hover:bg-color-surface-mixed-300"
+                className="flex gap-2 justify-center mt-1 hover:bg-color-surface-mixed-300"
                 onClick={() => { createCard(list.id) }}
             >
                 <span className="material-symbols-outlined">add_circle</span> Card
@@ -59,10 +59,13 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
     };
 
     return (
-        <section ref={setNodeRef} style={style} {...attributes} className={`bg-color-surface-mixed-200 w-56 p-3 ${isDragging ? "brightness-200" : ""}`}>
+        <section ref={setNodeRef} style={style} {...attributes} >
             {/** If the list is being hovered, use the card's position on the board 
-         * to indicate it's original position, otherwise render it as normal */}
+            * to indicate it's original position, otherwise render it as normal */}
+            <div className={`bg-color-surface-mixed-200 w-56 p-3 ${isDragging ? "brightness-200" : ""}`}>
+
             {RenderCards()}
+            </div>
         </section>
     )
 }
