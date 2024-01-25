@@ -10,6 +10,7 @@ import Kanban from "./components/Kanban/Kanban";
 import Error from "./pages/Error";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
+import Logout from "./pages/Logout";
 import Demo from "./pages/Demo";
 
 /**/
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="login" element={<Auth auth="login" />} />
       <Route path="register" element={<Auth auth="register" />} />
+      <Route path="logout" element={<Logout />} />
       <Route path="demo" element={<Demo />} />
       <Route path="/user/:user"></Route>
     </Route>
