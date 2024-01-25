@@ -18,9 +18,9 @@ import { createPortal } from "react-dom";
 import { ListType, CardType } from "../../types";
 import List from "./List";
 import Card from "./Card";
-import { CARD_ACTION_TYPES, CardActionType, CardsReducer } from "../../utils/CardsReducer";
-import { LIST_ACTION_TYPES, ListActionType, ListsReducer } from "../../utils/ListsReducer";
-import { ListData, CardData } from "../../utils/data";
+import { CARD_ACTION_TYPES, CardActionType, CardsReducer } from "../../providers/CardsReducer";
+import { LIST_ACTION_TYPES, ListActionType, ListsReducer } from "../../providers/ListsReducer";
+import { ListData, CardData } from "../../providers/data";
 
 export default function Board() {
   const [lists, listDispatch] = useReducer(ListsReducer, [])

@@ -1,34 +1,38 @@
-import Navbar from "./components/Navbar"
-import Kanban from "./components/Kanban/Kanban";
-
-/*
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
   RouterProvider,
-  Route
+  createRoutesFromElements,
+  createBrowserRouter,
+  Route,
 } from "react-router-dom";
-import Home from "./routes/Home";
-import ErrorPage from "./ErrorPage";
 
-const router = createBrowserRouter(createRoutesFromElements(
-  <Route
-  path="/"
-  element={<Home />}
-  errorElement={<ErrorPage />}
-  >
+import Navbar from "./components/Navbar";
+import Kanban from "./components/Kanban/Kanban";
+import Error from "./pages/Error";
+import Home from "./pages/Home";
+import Auth from "./pages/Auth";
+import Demo from "./pages/Demo";
 
-  </Route>
-));
-*/
+/**/
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Navbar />} errorElement={<Error />}>
+      <Route index element={<Home />} />
+      <Route path="login" element={<Auth auth="login" />} />
+      <Route path="register" element={<Auth auth="register" />} />
+      <Route path="demo" element={<Demo />} />
+      <Route path="/user/:user"></Route>
+    </Route>
+  )
+);
+
+
 
 export default function App() {
   return (
-    <div>
-      <div className="flex flex-col bg-color-surface-mixed-100 text-color-text-primary w-screen h-screen">
-        <Navbar />
-        <Kanban />
+    <div data-theme="pastel">
+      <div className="w-screen h-screen overflow-y-scroll">
+        <RouterProvider router={router} />
       </div>
     </div>
-  )
+  );
 }
