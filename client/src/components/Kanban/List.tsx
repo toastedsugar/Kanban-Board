@@ -33,7 +33,7 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
 
     const RenderCards = () => (
         <div className="flex gap-1.5 flex-col">
-            <div ref={setActivatorNodeRef} {...listeners} className="flex gap-2 bg-color-surface-100 p-2 select-none cursor-grab">
+            <div ref={setActivatorNodeRef} {...listeners} className="flex gap-2 bg-base-300 brightness-75 p-2 select-none cursor-grab">
                 <span className="material-symbols-outlined">
                     drag_indicator
                 </span>
@@ -62,7 +62,7 @@ export default function List({ list, createCard, updateCard, deleteCard, cards }
         <section ref={setNodeRef} style={style} {...attributes} >
             {/** If the list is being hovered, use the card's position on the board 
             * to indicate it's original position, otherwise render it as normal */}
-            <div className={`bg-color-surface-mixed-200 w-56 p-3 ${isDragging ? "brightness-200" : ""}`}>
+            <div className={`bg-base-300 w-56 p-3 ${isDragging ? "brightness-200" : ""}`}>
 
             {RenderCards()}
             </div>

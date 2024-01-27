@@ -25,12 +25,12 @@ export default function Auth({ auth }: AuthTypes) {
   function HandleLogin(e: any) {
     e.preventDefault();
     FirebaseLogin(email, password);
-    navigate('/')
+    navigate('/dashboard')
   }
   function HandleRegister(e: any) {
     e.preventDefault();
     FirebaseRegister(email, password);
-    navigate('/')
+    navigate('/dashboard')
   }
   
 

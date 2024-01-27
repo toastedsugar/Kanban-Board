@@ -40,7 +40,7 @@ export default function Card({ card }: CardProps) {
             {...attributes}
             {...listeners}
             onClick={() => setViewCard(true)}
-            className={`${isDragging ? "bg-color-surface-mixed-600" : "bg-color-surface-mixed-400"} border-4 border-color-surface-mixed-400 hover:border-color-primary-600 p-1 w-full h-full z-10 select-none cursor-grab`}
+            className={`${isDragging ? "bg-color-surface-mixed-600" : "bg-base-200"} border  hover:border-primary p-1 w-full h-full z-10 select-none cursor-grab`}
         >
         {RenderCard()}
         </section>
