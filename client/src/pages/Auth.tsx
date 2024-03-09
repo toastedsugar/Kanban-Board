@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { FirebaseLogin, FirebaseRegister } from "../utils/firebase-auth";
+import { auth } from "../../firebase-config.ts";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -15,28 +16,43 @@ type ErrorType = {
 };
 
 export default function Auth({ auth }: AuthTypes) {
-  const [error, setError] = useState<ErrorType>();
+  const [error, setError] = useState<any>(null);
+  const [username, setUsername] = useState<string>("")
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [viewPassword, setViewPassword] = useState<boolean>(false);
 
-  const navigate = useNavigate()
+  // Import auth context so isLoggedIn can be set when user logs in/ registers
 
-  function HandleLogin(e: any) {
+  const navigate = useNavigate();
+
+  async function HandleLogin(e: any) {
     e.preventDefault();
-    FirebaseLogin(email, password);
-    navigate('/dashboard')
+    const login = await FirebaseLogin(email, password);
+    if (login) {
+      //console.log(login)
+      setError(() => login);
+      return;
+      //console.log(error)
+    }
+    navigate("/dashboard");
   }
-  function HandleRegister(e: any) {
+
+  async function HandleRegister(e: any) {
     e.preventDefault();
-    FirebaseRegister(email, password);
-    navigate('/dashboard')
+    const register = await FirebaseRegister(username, email, password);
+    if (register) {
+      console.log(register);
+      setError(() => register);
+      return;
+      //console.log(error)
+    }
+    navigate("/dashboard");
   }
-  
 
   return (
     <div className="flex justify-center mt-10">
-      <div className="card bg-base-200 justify-center items-center w-96 shadow-xl">
+      <div className="card bg-base-100 justify-center items-center w-96 shadow-xl">
         <div className="p-12">
           <form
             className="flex flex-col"
@@ -50,12 +66,27 @@ export default function Auth({ auth }: AuthTypes) {
               {auth === "login" ? "Log into your account" : "Register with us"}
             </h2>
             <ul className="mb-6">
+              {/** Only render the username section if this is being used for registration */}
+              {auth === "register" && (
+                <li className="flex flex-col mb-2">
+                  <label className="label-text mb-1" htmlFor="usernameInput">
+                    Username
+                  </label>
+                  <input
+                    id="usernameInput"
+                    className="input input-bordered w-full max-w-xs"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </li>
+              )}
               <li className="flex flex-col mb-2">
-                <label className="label-text" htmlFor="usernameInput">
-                  Username
+                <label className="label-text mb-1" htmlFor="emailInput">
+                  Email
                 </label>
                 <input
-                  id="usernameInput"
+                  id="emailInput"
                   className="input input-bordered w-full max-w-xs"
                   type="email"
                   value={email}
@@ -63,7 +94,7 @@ export default function Auth({ auth }: AuthTypes) {
                 />
               </li>
               <li className="flex flex-col">
-                <label className="label-text" htmlFor="passwordInput">
+                <label className="label-text mb-1" htmlFor="passwordInput">
                   Password
                 </label>
                 <div className="flex relative ">
@@ -93,6 +124,9 @@ export default function Auth({ auth }: AuthTypes) {
                 {auth === "login" ? "Login" : "Register"}
               </button>
             </span>
+            <div className="flex justify-center mb-4 text-error">
+              {error && <b>{error.message}</b>}
+            </div>
             <span className="flex justify-center text-textSecondary text-sm">
               {auth === "login" ? (
                 <p>
@@ -109,7 +143,7 @@ export default function Auth({ auth }: AuthTypes) {
                   Already have an account?
                   <Link
                     className="font-bold ml-2 text-colorSecondary"
-                    to="/register"
+                    to="/login"
                   >
                     Login now
                   </Link>

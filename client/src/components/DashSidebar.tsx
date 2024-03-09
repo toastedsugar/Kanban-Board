@@ -1,6 +1,6 @@
 export default function DashSidebar() {
   return (
-    <div className="bg-base-100 w-52 -mt-4 pt-4">
+    <div className="bg-base-100 w-52 -mt-4 pt-8 h-full">
       <ul className="flex grow menu rounded-box">
         <li>
           <a>Dashboard Item 1</a>

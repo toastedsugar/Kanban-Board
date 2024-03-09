@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { FirebaseLogout } from "../utils/firebase-auth";
 import { useNavigate } from "react-router-dom";
 

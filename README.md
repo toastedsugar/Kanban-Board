@@ -6,3 +6,6 @@ My biggest issue was that I had overcomplicated my data structure too much, with
 
 Drag and drop assistance provided by: https://www.youtube.com/watch?v=RG-3R6Pu_Ik&ab_channel=CodewithKliton
 
+Useful for explaining how to use reducers inside context
+https://www.iamtimsmith.com/blog/using-reducers-with-context-in-react
+
