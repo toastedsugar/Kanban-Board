@@ -108,9 +108,9 @@ export default function Board() {
 
     // If a card is being dragged
     if (event.active.data.current?.type === "card") {
-      console.log("dragging card")
+      // console.log("dragging card")
       setActiveCard(event.active.data.current.card)
-      console.log(activeCard)
+      // console.log(activeCard)
       return
     }
   }

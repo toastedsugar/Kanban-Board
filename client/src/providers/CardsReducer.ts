@@ -24,7 +24,7 @@ export const CardsReducer: Reducer<CardType[], CardActionType> = (state, action)
             return action.payload
 
         case CARD_ACTION_TYPES.ADD_CARD:
-            console.log("Creating Card")
+            //console.log("Creating Card")
             const newCard: CardType = {
                 id: nanoid(),
                 parentListID: action.payload.parentListID,
@@ -33,7 +33,7 @@ export const CardsReducer: Reducer<CardType[], CardActionType> = (state, action)
             return [...state, newCard]
 
         case CARD_ACTION_TYPES.SWAP_CARD:
-            console.log("Swapping Card")
+            //console.log("Swapping Card")
 
             return (arrayMove(
                 state,
@@ -43,11 +43,11 @@ export const CardsReducer: Reducer<CardType[], CardActionType> = (state, action)
             return state;
 
         case CARD_ACTION_TYPES.UPDATE_CARD:
-            console.log("Updating Card")
+            //console.log("Updating Card")
             return state;
 
         case CARD_ACTION_TYPES.DELETE_CARD:
-            console.log("Deleting Card")
+            //console.log("Deleting Card")
             return state;
 
         default:
