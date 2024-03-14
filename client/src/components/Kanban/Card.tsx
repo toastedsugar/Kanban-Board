@@ -4,7 +4,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { CardProps } from "../../types";
 
 export default function Card({ card }: CardProps) {
-    const [viewCard, setViewCard] = useState<boolean>(false)
+    const [_viewCard, setViewCard] = useState<boolean>(false)
 
     const {
         attributes,
