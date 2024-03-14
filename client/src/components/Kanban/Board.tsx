@@ -9,7 +9,6 @@ import {
   MouseSensor,
   TouchSensor,
   closestCenter,
-  closestCorners,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -209,8 +208,8 @@ export default function Board() {
     ))
   }
   return (
-    <div>
-      <h2 className="text-2xl font-semibold py-2 ">
+    <div className="pb-8">
+      <h2 className="text-2xl font-semibold py-2">
 
         Kanban Board Demo
       </h2>

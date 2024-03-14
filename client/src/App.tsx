@@ -53,8 +53,11 @@ export default function App() {
         );
         */
        return(
-        <div data-theme="sunset">
+        <div data-theme="winter">
+          <div className="h-screen w-screen">
+
           <Kanban />
+          </div>
 
         </div>
        )
