@@ -19,8 +19,6 @@ import AppLayout from "./components/AppLayout";
 
 import Kanban from "./components/Kanban/Kanban";
 export default function App() {
-
-
   /*
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -52,13 +50,11 @@ export default function App() {
         </div>
         );
         */
-       return(
-        <div data-theme="winter">
-          <div className="h-screen w-screen">
-
-          <Kanban />
-          </div>
-
-        </div>
-       )
+  return (
+    <div data-theme="winter">
+      <div className="h-screen w-screen">
+        <Kanban />
+      </div>
+    </div>
+  );
 }
